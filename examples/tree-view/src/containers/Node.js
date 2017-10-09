@@ -36,6 +36,8 @@ export class Node extends Component {
 
   render() {
     const { counter, parentId, childIds } = this.props
+
+    let adapter = findAdapter(this);
     return (
       <div>
         Counter: {counter}
@@ -44,6 +46,7 @@ export class Node extends Component {
           +
         </button>
         {' '}
+        {adapter && adapter.render()}
         {typeof parentId !== 'undefined' &&
           <a href="#" onClick={this.handleRemoveClick} // eslint-disable-line jsx-a11y/href-no-hash
              style={{ color: 'lightgray', textDecoration: 'none' }}>
@@ -63,6 +66,11 @@ export class Node extends Component {
       </div>
     )
   }
+}
+
+const findAdapter = (self) => {
+  // Do Table lookup on self.className.
+  return null;
 }
 
 function mapStateToProps(state, ownProps) {

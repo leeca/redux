@@ -1,16 +1,5 @@
 import { INCREMENT, ADD_CHILD, REMOVE_CHILD, CREATE_NODE, DELETE_NODE } from '../actions'
 
-const childIds = (state, action) => {
-  switch (action.type) {
-    case ADD_CHILD:
-      return [ ...state, action.childId ]
-    case REMOVE_CHILD:
-      return state.filter(id => id !== action.childId)
-    default:
-      return state
-  }
-}
-
 const node = (state, action) => {
   switch (action.type) {
     case CREATE_NODE:
@@ -25,14 +14,26 @@ const node = (state, action) => {
         counter: state.counter + 1
       }
     case ADD_CHILD:
+      return {
+        ...state,
+        childIds: [ ...state.childIds, action.childId ]
+      }
     case REMOVE_CHILD:
       return {
         ...state,
-        childIds: childIds(state.childIds, action)
+        childIds: state.childIds.filter(id => id !== action.childId)
       }
     default:
+      let adapter = findAdapter(state);
+      if (adapter) {
+        return adapter.selfAction(state, action);
+      }
       return state
   }
+}
+
+const findAdapter = (state) => {
+  return null;
 }
 
 const getAllDescendantIds = (state, nodeId) => (
