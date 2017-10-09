@@ -37,7 +37,8 @@ export class Node extends Component {
   render() {
     const { counter, parentId, childIds } = this.props
 
-    let adapter = findAdapter(this);
+    // let adapter = findAdapter(this.state[this.props.id], RenderRegistry);
+    let adapter = null;
     return (
       <div>
         Counter: {counter}
@@ -68,14 +69,37 @@ export class Node extends Component {
   }
 }
 
-const findAdapter = (self) => {
-  // Do Table lookup on self.className.
+// Need to make these global state .. probably not Redux "state".
+// ActionRegistry should be the same one used in reducers/index.js
+let RenderRegistry = []
+let ActionRegistry = []
+
+// Duplicated from reducers/index.js
+const findAdapter = (self, registry) => {
+
+  for (let ndx = 0; ndx < registry.length; ndx++) {
+    let contrib = registry[ndx];
+    if (contrib && contrib.accepts(self)) {
+      // Could be cached with "self" as key
+      return contrib.getAdapter();
+    }
+  }
+
+  // No adapter for this object.
   return null;
 }
 
 function mapStateToProps(state, ownProps) {
-  return state[ownProps.id]
+  return state[ownProps.id];
 }
 
-const ConnectedNode = connect(mapStateToProps, actions)(Node)
+function mapDispatchToProps(state, ownProps) {
+  let adapter = findAdapter(state[ownProps.id], ActionRegistry);
+  if (adapter) {
+    return {...actions, ...adapter.getActions()};
+  }
+  return actions;
+}
+
+const ConnectedNode = connect(mapStateToProps, mapDispatchToProps)(Node)
 export default ConnectedNode

@@ -1,12 +1,13 @@
-import { SUM_CHILDREN } from '../actions'
+import { MULT_CHILDREN } from '../actions'
 
 
 const handleAction = (state, action) => {
+
   switch (action.type) {
-    case SUM_CHILDREN:
+    case MULT_CHILDREN:
       return {
         ...state,
-        counter: state.counter + 1
+        counter: state.counter * 2
       }
     default:
       return state

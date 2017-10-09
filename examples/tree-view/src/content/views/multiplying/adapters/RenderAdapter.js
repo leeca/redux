@@ -4,25 +4,26 @@ import { connect } from 'react-redux'
 import * as actions from '../actions'
 
 const RenderAdapter = {
+
   accepts(item) {
-    return item.typeName === additive.class
+    return item.typeName === multiplying.class
   }
 
-  handleAddClick = e => {
+  handleMultClick = e => {
     e.preventDefault();
 
-    const { sumChildren, nodeId } = this.props;
-    sumChildren(nodeId);
+    const { multChildren, nodeId } = this.props;
+    multChildren(nodeId);
   }
 
   render() {
-    const { counter, parentId, childIds } = this.props
+    const { counter } = this.props
     return (
       <div>
         Counter: {counter}
         {' '}
-        <button onClick={this.handleAddClick}>
-          Sum
+        <button onClick={this.handleMultClick}>
+          Mult
         </button>
         {' '}
       </div>
