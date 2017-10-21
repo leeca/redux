@@ -1,8 +1,9 @@
-import ActionAdpater from ../adapters/ActionAdapter
-import RenderAdapter from ../adapters/RenderAdapter
+import { ActionRegistry, RenderRegistry, addAdapter } from '../../cms-registry'
 
+import ActionAdpater from '../adapters/ActionAdapter'
+import RenderAdapter from '../adapters/RenderAdapter'
 
 const install = () => {
-  actionRegistry.push(ActionAdapter);
-  renderRegistry[additive.class] = RenderAdapter;
+  addAdapter(ActionRegistry, ActionAdapter);
+  addAdapter(RenderRegistry, RenderAdapter);
 }

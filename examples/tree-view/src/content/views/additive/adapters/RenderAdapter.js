@@ -16,7 +16,7 @@ const RenderAdapter = {
   }
 
   render() {
-    const { counter, parentId, childIds } = this.props
+    const { counter, parentId, childIds, sumChildren } = this.props
     return (
       <div>
         Counter: {counter}

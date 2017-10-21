@@ -33,6 +33,10 @@ export class Node extends Component {
       </li>
     )
   }
+  
+  getComponent = {
+      find();
+  }
 
   render() {
     const { counter, parentId, childIds } = this.props
@@ -48,6 +52,7 @@ export class Node extends Component {
         </button>
         {' '}
         {adapter && adapter.render()}
+        <adapter>
         {typeof parentId !== 'undefined' &&
           <a href="#" onClick={this.handleRemoveClick} // eslint-disable-line jsx-a11y/href-no-hash
              style={{ color: 'lightgray', textDecoration: 'none' }}>
