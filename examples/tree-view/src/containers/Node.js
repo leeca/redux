@@ -1,48 +1,50 @@
-import React from 'react'
-import { Component } from 'react'
-import { connect } from 'react-redux'
-import * as actions from '../actions'
+import React from 'react';
+import { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../actions';
+
+class EmptyNodeAdapter extends Component {
+  render() {
+    return (null);
+  }
+}
 
 export class Node extends Component {
   handleIncrementClick = () => {
-    const { increment, id } = this.props
-    increment(id)
+    const { increment, id } = this.props;
+    increment(id);
   }
 
   handleAddChildClick = e => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const { addChild, createNode, id } = this.props
-    const childId = createNode().nodeId
-    addChild(id, childId)
+    const { addChild, createNode, id } = this.props;
+    const childId = createNode().nodeId;
+    addChild(id, childId);
   }
 
   handleRemoveClick = e => {
-    e.preventDefault()
+    e.preventDefault();
 
-    const { removeChild, deleteNode, parentId, id } = this.props
-    removeChild(parentId, id)
-    deleteNode(id)
+    const { removeChild, deleteNode, parentId, id } = this.props;
+    removeChild(parentId, id);
+    deleteNode(id);
   }
 
   renderChild = childId => {
-    const { id } = this.props
+    const { id } = this.props;
+
     return (
       <li key={childId}>
         <ConnectedNode id={childId} parentId={id} />
       </li>
     )
   }
-  
-  getComponent = {
-      find();
-  }
 
   render() {
-    const { counter, parentId, childIds } = this.props
+    const { counter, parentId, childIds } = this.props;
+     let Adapter = findAdapter(this.props);
 
-    // let adapter = findAdapter(this.state[this.props.id], RenderRegistry);
-    let adapter = null;
     return (
       <div>
         Counter: {counter}
@@ -51,8 +53,7 @@ export class Node extends Component {
           +
         </button>
         {' '}
-        {adapter && adapter.render()}
-        <adapter>
+        <Adapter id={this.props.id} />
         {typeof parentId !== 'undefined' &&
           <a href="#" onClick={this.handleRemoveClick} // eslint-disable-line jsx-a11y/href-no-hash
              style={{ color: 'lightgray', textDecoration: 'none' }}>
@@ -74,37 +75,30 @@ export class Node extends Component {
   }
 }
 
-// Need to make these global state .. probably not Redux "state".
-// ActionRegistry should be the same one used in reducers/index.js
-let RenderRegistry = []
-let ActionRegistry = []
+const NodeRenderRegistry = [];
 
-// Duplicated from reducers/index.js
-const findAdapter = (self, registry) => {
+const findAdapter = (props) => {
 
-  for (let ndx = 0; ndx < registry.length; ndx++) {
-    let contrib = registry[ndx];
-    if (contrib && contrib.accepts(self)) {
+  for (let ndx = 0; ndx < NodeRenderRegistry.length; ndx++) {
+    let contrib = NodeRenderRegistry[ndx];
+    if (contrib && contrib.accepts(props)) {
       // Could be cached with "self" as key
-      return contrib.getAdapter();
+      return contrib.getAdapter(props);
     }
   }
 
   // No adapter for this object.
-  return null;
+  return EmptyNodeAdapter;
+}
+
+const addNodeRenderer = (contrib) => {
+  NodeRenderRegistry.push(contrib);
 }
 
 function mapStateToProps(state, ownProps) {
   return state[ownProps.id];
 }
 
-function mapDispatchToProps(state, ownProps) {
-  let adapter = findAdapter(state[ownProps.id], ActionRegistry);
-  if (adapter) {
-    return {...actions, ...adapter.getActions()};
-  }
-  return actions;
-}
+const ConnectedNode = connect(mapStateToProps, actions)(Node);
 
-const ConnectedNode = connect(mapStateToProps, mapDispatchToProps)(Node)
-export default ConnectedNode
+export { ConnectedNode, addNodeRenderer };

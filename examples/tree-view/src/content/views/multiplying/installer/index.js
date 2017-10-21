@@ -1,8 +1,31 @@
-import ActionAdpater from ../adapters/ActionAdapter
-import RenderAdapter from ../adapters/RenderAdapter
+import { MULTIPLYING_TYPE } from '../../../data/multiplying';
 
+import { addNodeRenderer } from '../../../../containers/Node';
+import { addNodeReducer } from '../../../../reducers';
 
-const install = () => {
-  actionRegistry.push(ActionAdapter);
-  renderRegistry.push(RenderAdapter);
+import { ConnectedMultiplyingNode, performAction } from '../reducers';
+
+const nodeRenderContrib = {
+  accepts: (state) => {
+    return (state.typeName === MULTIPLYING_TYPE);
+  },
+
+  getAdapter: (state) => {
+    return ConnectedMultiplyingNode;
+  }
+}
+
+const nodeReduceContrib = {
+  accepts: (state) => {
+    return (state.typeName === MULTIPLYING_TYPE);
+  },
+
+  getAdapter: (state) => {
+    return performAction;
+  }
+}
+
+export default function install() {
+  addNodeRenderer(nodeRenderContrib);
+  addNodeReducer(nodeReduceContrib);
 }

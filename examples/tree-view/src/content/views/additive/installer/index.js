@@ -1,9 +1,31 @@
-import { ActionRegistry, RenderRegistry, addAdapter } from '../../cms-registry'
+import { ADDITIVE_TYPE } from '../../../data/additive';
 
-import ActionAdpater from '../adapters/ActionAdapter'
-import RenderAdapter from '../adapters/RenderAdapter'
+import { addNodeRenderer } from '../../../../containers/Node';
+import { addNodeReducer } from '../../../../reducers';
 
-const install = () => {
-  addAdapter(ActionRegistry, ActionAdapter);
-  addAdapter(RenderRegistry, RenderAdapter);
+import { ConnectedAdditiveNode, performAction } from '../reducers';
+
+const nodeRenderContrib = {
+  accepts: (state) => {
+    return (state.typeName === ADDITIVE_TYPE);
+  },
+
+  getAdapter: (state) => {
+    return ConnectedAdditiveNode;
+  }
+}
+
+const nodeReduceContrib = {
+    accepts: (state) => {
+      return (state.typeName === ADDITIVE_TYPE);
+    },
+
+    getAdapter: (state) => {
+      return performAction;
+    }
+  }
+
+export default function install() {
+  addNodeRenderer(nodeRenderContrib);
+  addNodeReducer(nodeReduceContrib);
 }

@@ -1,4 +1,4 @@
-export const ADDITIVE_TYPE = 'ADDITIVE_TYPE';
+export const MULTIPLYING_TYPE = 'MULTIPLYING_TYPE';
 
 export const create = (id) => {
 
@@ -6,6 +6,6 @@ export const create = (id) => {
     id: id,
     counter: 0,
     childIds: [],
-    typeName: ADDITIVE_TYPE
+    typeName: MULTIPLYING_TYPE
   }
 }

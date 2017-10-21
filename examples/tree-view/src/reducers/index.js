@@ -1,5 +1,3 @@
-import { ActionRegistry, RenderRegistry, findAdapter } from '../cms-registry'
-
 import { INCREMENT, ADD_CHILD, REMOVE_CHILD, CREATE_NODE, DELETE_NODE } from '../actions'
 
 const node = (state, action) => {
@@ -26,12 +24,32 @@ const node = (state, action) => {
         childIds: state.childIds.filter(id => id !== action.childId)
       }
     default:
-      let adapter = findAdapter(state, ActionRegistry);
-      if (adapter) {
-        return adapter.handleAction(state, action);
+      let reducer = findAdapter(state);
+      if (reducer) {
+        return reducer(state, action);
       }
       return state
   }
+}
+
+const NodeReduceRegistry = [];
+
+const findAdapter = (state) => {
+
+  for (let ndx = 0; ndx < NodeReduceRegistry.length; ndx++) {
+    let contrib = NodeReduceRegistry[ndx];
+    if (contrib && contrib.accepts(state)) {
+      // Could be cached with "self" as key
+      return contrib.getAdapter(state);
+    }
+  }
+
+  // No adapter for this object.
+  return null;
+}
+
+const addNodeReducer = (contrib) => {
+  NodeReduceRegistry.push(contrib);
 }
 
 const getAllDescendantIds = (state, nodeId) => (
@@ -62,3 +80,5 @@ export default (state = {}, action) => {
     [nodeId]: node(state[nodeId], action)
   }
 }
+
+export { addNodeReducer };

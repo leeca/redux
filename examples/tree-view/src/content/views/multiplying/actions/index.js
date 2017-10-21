@@ -1,6 +1,6 @@
-export const MULT_CHILDREN = 'MULT_CHILDREN'
+export const MULTIPLY_CHILDREN = 'MULTIPLY_CHILDREN';
 
-export const multChildren = (nodeId) => ({
-  type: MULT_CHILDREN,
+export const multiplyChildren = (nodeId) => ({
+  type: MULTIPLY_CHILDREN,
   nodeId
-})
+});
