@@ -16,9 +16,17 @@ export default function generateTree() {
 }
 
 const createData = (id) => {
-  if (Math.random() > 0.5) {
+  if (Math.random() > 0.4) {
     return createMultiplying(id);
   }
 
-  return createAdditive(id);
+  if (Math.random() > 0.8) {
+    return createAdditive(id);
+  }
+
+  return {
+    id: id,
+    counter: 0,
+    childIds: [],
+  };
 }

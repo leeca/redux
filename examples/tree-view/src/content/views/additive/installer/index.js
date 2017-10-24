@@ -7,7 +7,7 @@ import { ConnectedAdditiveNode, performAction } from '../reducers';
 
 const nodeRenderContrib = {
   accepts: (state) => {
-    return (state.typeName === ADDITIVE_TYPE);
+    return (state.classTag === ADDITIVE_TYPE);
   },
 
   getAdapter: (state) => {
@@ -17,7 +17,7 @@ const nodeRenderContrib = {
 
 const nodeReduceContrib = {
     accepts: (state) => {
-      return (state.typeName === ADDITIVE_TYPE);
+      return (state.classTag === ADDITIVE_TYPE);
     },
 
     getAdapter: (state) => {

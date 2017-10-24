@@ -6,6 +6,6 @@ export const create = (id) => {
     id: id,
     counter: 0,
     childIds: [],
-    typeName: ADDITIVE_TYPE
+    classTag: ADDITIVE_TYPE
   }
 }
